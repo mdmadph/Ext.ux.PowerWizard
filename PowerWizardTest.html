@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>PowerWizard Test</title>
+		
+		<script type="text/javascript" src="/js-lib/ext-2.0.2/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="/js-lib/ext-2.0.2/ext-all.js"></script>
+		<script type="text/javascript" src="Ext.ux.PowerWizard.js"></script>
+		
+		<link href="/js-lib/ext-2.0.2/resources/css/ext-all.css" type="text/css" rel="stylesheet">
+		
+		<script type="text/javascript">
+			
+		var testWizard = null;
+			
+		Ext.onReady(function () {
+			
+			testWizard = new Ext.ux.PowerWizard({
+				id: "card-emp-wizard",
+				title: "",
+				activeItem: 0,
+				
+				cancelHandler: function () {
+					// commands to perform upon use cancellation
+					testWizard.reset(true);
+					wizardWindow.hide();
+				},
+				submitHandler: function () {
+					Ext.Msg.alert("Wizard Output", Ext.encode(this.getValues()));
+				},
+				items: [{
+					xtype: "panel",
+					id: "card-0",
+					html: '<div style="font-size: 9pt;">'
+						+ "Welcome to the Sample PowerWizard Application."
+						+ "</div>"
+				},{
+					id: "card-1",
+					sequenceControl: [{
+						key: "opt01",
+						values: {
+							"Yes": 3
+						}
+					}],
+					items: {
+						id: "card-1-fieldset-1",
+						title: "Are you available to work without restriction?",
+						items: [{
+							boxLabel: "Yes",
+							inputValue: "Yes",
+							name: "opt01"
+						},{
+							boxLabel: "No",
+							inputValue: "No",
+							name: "opt01"
+						}]
+					}
+				},{				
+					id: "card-2",
+					items: {
+						id: "card-2-fieldset-1",
+						title: "Are you available to work from home?",
+						items: [{
+							boxLabel: "Yes",
+							inputValue: "Yes",
+							name: "opt02"
+						},{
+							boxLabel: "No",
+							inputValue: "No",
+							name: "opt02"
+						}]
+					}
+				},{				
+					id: "card-3",
+					items: {
+						id: "card-3-fieldset-1",
+						title: "Upload a file?",
+						items: [{
+							fieldLabel: 'Upload file',
+							name: 'opt03',
+							inputType: 'password',
+							xtype: 'textfield',
+							allowBlank: true
+						}]
+					}
+				},{
+					xtype: "panel",
+					id: "card-4",
+					html: '<div style="font-size: 9pt;">'
+						+ "Your information is now complete.  Submit your form to start your employment."
+						+ '</div',
+					listeners: {
+						"show": function () {
+							Ext.Msg.alert("Alert", "Your form can now be submitted.");
+						}
+					}
+				}]
+			});
+			
+			
+			var wizardWindow = new Ext.Window({
+				closeAction: 'hide',
+				layout: "fit",
+				modal: true,
+				plain: false,
+				resizable: true,
+				title: "Wizard Window",
+				
+				height: 400,
+				minHeight: 400,
+				width: 625,
+				minWidth: 625,
+				
+				items: [
+					testWizard.source
+				]
+			});
+			
+			wizardWindow.on({
+				"hide": function () {
+					testWizard.reset(true);
+				}
+			});
+			
+			Ext.get("test_button_for_wizard").on("click", function () {
+				wizardWindow.show();
+			});
+			
+		});
+		
+		</script>
+		
+	</head>
+	<body>
+		<div style="margin: 10px;">Ext.ux.PowerWizard v0.1 Demo</div>
+		<button id="test_button_for_wizard" style="margin: 10px;">Show PowerWizard Window!</button>
+	</body>
+</html>
